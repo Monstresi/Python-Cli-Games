@@ -1,3 +1,4 @@
+import random
 
 def print_intro_art():
     '''
@@ -34,6 +35,12 @@ def get_move(player):
                 print("Invalid move. Please enter a number between 1 and 9.")
         except ValueError:
             print("Invalid input. Please enter a number.")
+
+def random_move(board):
+    empty_positions = [i for i, space in enumerate(board) if space == " "]
+    if empty_positions:
+        return random.choice(empty_positions)
+    return None
 
 
 def is_winner(board, player):
@@ -86,14 +93,18 @@ def main():
 
         while True:
             print_board(board)
-            move = get_move(current_player)
-            
-            if board[move] == " ":
+            if current_player == "X":
+                move = get_move(current_player)
+            else:
+                move = random_move(board)
+
+            if move is not None and board[move] == " ":
                 board[move] = current_player
             else:
-                print("The position is already occupied. Try again.")
-                continue
-            
+                if current_player == "O":
+                    print("The position is already occupied. Trying a new move.")
+                    continue
+
             if is_winner(board, current_player):
                 print_board(board)
                 print(f"Player {current_player} wins!")
